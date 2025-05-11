@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hanno",
+    "NAME_SCHULDNER": "Hanno Berger",
+    "ADRESSE": "Musterstraße 1, 12345 Berlin",
+    "MANDANT": "ABC Inkasso",
+    "UNTERNEHMEN": "Berger GmbH",
+    "PRODUKT": "Beratungsdienstleistung",
+    "RECHNUNGSDATUM": "2024-01-10",
+    "BETRAG": "1375.00",
+    "MAHNSTATUS_MANDANT": "Mahnung 1 vom 01.02.2024",
+    "MAHNSTATUS_INKASSO": "Noch keine Maßnahme",
+    "WUNSCHRATE": "150",
+    "WUNSCHRATE_PLUS20": "170",
+    "FRISTTAG": "2024-05-20",
+    "ZAHLUNGSTERMIN": "2024-06-01",
+    "GEBURTSDATUM": "1980-05-12",
+    "GEBURTSORT": "Frankfurt am Main"
+  },
+  {
+    "id": "sabine",
+    "NAME_SCHULDNER": "Sabine Klein",
+    "ADRESSE": "Beispielweg 8, 45678 Köln",
+    "MANDANT": "XYZ Inkasso",
+    "UNTERNEHMEN": "Klein Events",
+    "PRODUKT": "Eventplanung",
+    "RECHNUNGSDATUM": "2024-03-01",
+    "BETRAG": "920.00",
+    "MAHNSTATUS_MANDANT": "Mahnung 2 vom 01.04.2024",
+    "MAHNSTATUS_INKASSO": "Letzte Zahlungsaufforderung",
+    "WUNSCHRATE": "100",
+    "WUNSCHRATE_PLUS20": "120",
+    "FRISTTAG": "2024-05-31",
+    "ZAHLUNGSTERMIN": "2024-06-10",
+    "GEBURTSDATUM": "1992-08-19",
+    "GEBURTSORT": "Köln"
+  }
+]

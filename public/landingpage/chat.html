@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angel-Adviser</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4712/4712027.png">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #f9fbfc, #eef2f5);
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: white;
+            padding: 4px;
+        }
+
+        .brand-name {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .main-layout {
+            display: flex;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+        }
+
+        .sidebar-left {
+            width: 320px;
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.05);
+            overflow-y: auto;
+        }
+
+        .center-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: #f7f9fc;
+            border-left: 1px solid #eee;
+            border-right: 1px solid #eee;
+        }
+
+        .chat-area {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            max-height: 70vh;
+        }
+
+        .chat-message {
+            max-width: 70%;
+            padding: 12px 16px;
+            margin: 10px 0;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            word-break: break-word;
+            font-family: 'Segoe UI', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+            }
+
+            .chat-message p {
+            margin: 0 0 6px 0;
+            }
+
+            .chat-message ul {
+            margin: 0 0 6px 16px;
+            padding-left: 16px;
+            }
+
+            .chat-message li {
+            margin-bottom: 4px;
+        }
+
+
+        .chat-message.user {
+            background-color: #d1eaff;
+            align-self: flex-end;
+            color: #003366;
+            border-bottom-right-radius: 0;
+        }
+
+        .chat-message.gpt {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+            color: #333;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-area {
+          display: flex;
+          gap: 12px;
+          margin-top: 12px;
+          align-items: center;
+        }
+
+        .input-area input {
+          flex: 1;
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          font-size: 15px;
+        }
+
+        .chat-buttons {
+          display: flex;
+          gap: 8px;
+        }
+
+        .chat-buttons button {
+          padding: 12px 16px;
+          background-color: #0055aa;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+        }
+
+        .chat-buttons button:hover {
+          background-color: #003f7d;
+        }
+
+
+        .schuldner-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .schuldner-card input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            display: block;
+        }
+
+        .schuldner-card input[type="date"]::before {
+            content: attr(placeholder) ' ';
+            color: #888;
+        }
+
+        .start-button {
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+            background: linear-gradient(to right, #0078d4, #00b894);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-button:hover {
+            opacity: 0.9;
+        }
+
+        #avatar {
+            width: 80px;
+            height: 80px;
+            margin: auto;
+            margin-bottom: 15px;
+            border-radius: 50%;
+            background: url('https://ui-avatars.com/api/?name=Angel&background=003366&color=fff') no-repeat center center / cover;
+            transition: filter 0.4s;
+        }
+
+        .avatar-speaking {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%   { filter: brightness(1); }
+            50%  { filter: brightness(1.6); }
+            100% { filter: brightness(1); }
+        }
+
+        label[for^="schuldner-"] {
+            font-weight: bold;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .schuldner-card input[type="date"] {
+            font-family: 'Segoe UI', sans-serif;
+            text-align: left;
+        }
+
+        input[type="date"]::-webkit-datetime-edit-month-field,
+        input[type="date"]::-webkit-datetime-edit-day-field,
+        input[type="date"]::-webkit-datetime-edit-year-field {
+            color: #333;
+        }
+
+
+        #emailInput {
+          padding: 10px;
+          font-size: 14px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          display: block;
+        }
+
+
+        #emailStatus {
+          margin-top: 6px;
+          font-weight: 500;
+          color: green;
+        }
+
+        button[type="button"]:not(.start-button):not(.reset-button) {
+          padding: 10px;
+          background-color: #0055aa;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          margin-top: 8px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background 0.3s;
+        }
+
+        button[type="button"]:hover {
+          background-color: #003f7d;
+        }
+
+        .reset-button {
+          background-color: #ff9f43;
+          border: none;
+          color: white;
+          font-weight: bold;
+          border-radius: 8px;
+          padding: 10px;
+          cursor: pointer;
+        }
+
+        .reset-button:hover {
+          background-color: #e57d00;
+        }
+
+        #loginNotice {
+          background: #ffe5e5;
+          border: 1px solid #ff4d4d;
+          border-radius: 8px;
+          padding: 12px;
+          margin: 20px;
+          font-size: 15px;
+          color: #a00;
+          text-align: center;
+        }
+
+        #userInfo {
+          position: fixed;
+          top: 90px;
+          right: 20px;
+          background: #f1f9ff;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          padding: 12px;
+          font-size: 14px;
+          color: #003366;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #userInfo button {
+          margin-left: 12px;
+          padding: 6px 10px;
+          background-color: #c0392b;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        #userInfo button:hover {
+          background-color: #922b21;
+        }
+        #csv-upload-section {
+          display: block;
+          background: #f4f7fa;
+          padding: 16px;
+          border-radius: 10px;
+          border: 1px solid #cdd6e0;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        #csv-upload-section h3 {
+          font-size: 16px;
+          margin-bottom: 12px;
+          color: #003366;
+        }
+
+        .file-upload-label {
+          display: inline-block;
+          padding: 10px 16px;
+          background-color: #0078d4;
+          color: white;
+          font-weight: bold;
+          font-size: 14px;
+          border-radius: 8px;
+          cursor: pointer;
+          text-align: center;
+          transition: background-color 0.3s ease;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .file-upload-label:hover {
+          background-color: #005fa3;
+        }
+        #csvfile {
+          display: none;
+        }
+
+        #selectedFileName {
+          margin-top: 8px;
+          font-size: 13px;
+          color: #333;
+          font-style: italic;
+        }
+
+        #csv-upload-section button {
+          margin-top: 12px;
+          padding: 12px 20px;
+          background: linear-gradient(to right, #0078d4, #00b894);
+          color: white;
+          font-weight: bold;
+          font-size: 15px;
+          border: none;
+          border-radius: 10px;
+          cursor: pointer;
+          width: 100%;
+          box-shadow: 0 4px 10px rgba(0, 120, 212, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        #csv-upload-section button:hover {
+          background: linear-gradient(to right, #005fa3, #009f7a);
+          transform: translateY(-1px);
+          box-shadow: 0 6px 14px rgba(0, 95, 163, 0.25);
+        }
+
+        #uploadStatus {
+          margin-top: 10px;
+          font-size: 14px;
+          color: #006600;
+        }
+
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<script src="/js/muster-schuldner.js" defer></script>
+
+
+
+
+<body>
+
+    <header>
+      <div class="header-content">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Logo" class="logo">
+        <span class="brand-name">Angel Adviser</span>
+      </div>
+    </header>
+  
+    <div class="main-layout">
+      <div class="sidebar-left">
+        <div class="schuldner-card">
+
+          <section id="csv-upload-section">
+            <h3>📤 Schuldnerdaten hochladen (CSV)</h3>
+            <form id="csvUploadForm" enctype="multipart/form-data">
+              <label for="csvfile" class="file-upload-label">📁 Datei auswählen</label>
+              <input id="csvfile" type="file" name="csvfile" accept=".csv" required hidden />
+              <div id="selectedFileName">📄 Keine Datei ausgewählt</div>
+              <button type="submit">Hochladen</button>
+            </form>
+            <div id="uploadStatus"></div>
+          </section>
+          
+
+          <h3>🔎 Schuldnerdaten laden</h3>
+              <input type="text" id="schuldner-id" placeholder="Datensatz-ID (z. B. 1)">
+              <button type="button" onclick="ladeSchuldner()">Suchen</button>
+
+          <h3>📇 Schuldner</h3>
+          <button type="button" class="reset-button" onclick="resetConversation()">🔄 Gespräch zurücksetzen</button>
+          <button>Musterfall</button>
+          <input type="text" id="schuldner-name" placeholder="Name">
+          <input type="text" id="schuldner-adresse" placeholder="Adresse">
+          <input type="text" id="schuldner-mandant" placeholder="Mandant">
+          <input type="text" id="schuldner-unternehmen" placeholder="Unternehmen">
+          <input type="text" id="schuldner-produkt" placeholder="Produkt / Dienstleistung">
+          <input type="date" id="schuldner-rechnung" placeholder="Rechnungsdatum">
+          <input type="number" id="schuldner-betrag" placeholder="Forderung (€)">
+          <input type="text" id="schuldner-mahn-mandant" placeholder="Mahnstatus Mandant">
+          <input type="text" id="schuldner-mahn-inkasso" placeholder="Mahnstatus Inkasso">
+          <input type="number" id="schuldner-wunschrate" placeholder="Wunschrate (€)">
+          <input type="number" id="schuldner-wunschrate-plus20" placeholder="Wunschrate + 20 €">
+          <input type="date" id="schuldner-fristtag" placeholder="Fristtag">
+          <input type="date" id="schuldner-zahlungstermin" placeholder="Zahlungstermin">
+          <input type="date" id="schuldner-geburtsdatum" placeholder="Geburtsdatum">
+          <input type="text" id="schuldner-geburtsort" placeholder="Geburtsort">
+          <button type="button" class="start-button" onclick="startConversation()">🟢 Gespräch starten</button>
+          <h3>Gespräch exportieren</h3>
+              <button id="pdfExportBtn">📄 PDF herunterladen</button>
+          <h3>📧 Gespräch per Mail senden</h3>
+              <input type="email" id="emailInput" placeholder="Empfängeradresse">
+              <button type="button" onclick="sendConversationByEmail()">Senden</button>
+              <div id="emailStatus" style="margin-top: 8px; color: green; font-size: 14px;"></div>
+        </div>
+      </div>
+  
+      <div class="center-panel">
+        <div id="avatar"></div>
+        <div class="chat-area" id="chatArea"></div>
+        <div class="input-area">
+          <input type="text" id="userInput" placeholder="Gesprächsnotiz oder Eingabe...">
+          <div class="chat-buttons">
+            <button type="button" onclick="handleUserInput()">Weiter</button>
+            <button type="button" onclick="requestSummary()">📝 Zusammenfassung anfordern</button>
+          </div>
+        </div>        
+    </div>
+    <div id="loginNotice" style="display: none; color: red; padding: 1rem;">
+      ⚠️ Du musst eingeloggt sein, um den Chat zu nutzen.
+      <a href="/landingpage/indexlogin.html">Hier einloggen</a>
+    </div>
+    
+    <div id="userInfo" style="display: none;">
+      Eingeloggt als: <span id="usernameDisplay"></span>
+      <button onclick="logoutUser()">🔓 Logout</button>
+    </div>
+    
+  
+  <script>
+    
+  
+  async function checkLogin() {
+    try {
+      const res = await fetch('/api/me', {
+  credentials: 'include'  // 👈 wichtig für Session-Cookies
+});
+
+      if (!res.ok) throw new Error();
+
+      const json = await res.json();
+      document.getElementById("loginNotice").style.display = "none";
+      document.getElementById("chatArea").style.display = "block";
+      document.getElementById("userInfo").style.display = "block";
+      document.getElementById("usernameDisplay").textContent = json.username;
+    } catch {
+      document.getElementById("loginNotice").style.display = "block";
+      document.getElementById("chatArea").style.display = "none";
+      document.getElementById("userInfo").style.display = "none";
+    }
+  }
+
+  async function logoutUser() {
+    await fetch('/api/logout', { method: 'POST' });
+    window.location.reload();
+  }
+
+  window.addEventListener("DOMContentLoaded", checkLogin);
+
+
+  
+const fileInput = document.getElementById('csvfile');
+const fileNameDisplay = document.getElementById('selectedFileName');
+
+  fileInput.addEventListener('change', function () {
+    const fileName = this.files.length > 0 ? this.files[0].name : '📄 Keine Datei ausgewählt';
+    fileNameDisplay.textContent = `📄 ${fileName}`;
+});
+
+document.getElementById('csvUploadForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const statusDiv = document.getElementById('uploadStatus');
+
+    try {
+      const res = await fetch('/upload-csv', {
+        method: 'POST',
+        body: formData
+      });
+
+      const json = await res.json();
+      if (res.ok) {
+        statusDiv.innerText = `Upload erfolgreich: ${json.inserted} Datensätze gespeichert.`;
+      } else {
+        statusDiv.innerText = `Fehler: ${json.error || 'Unbekannt'}`;
+      }
+    } catch (err) {
+      statusDiv.innerText = 'Upload fehlgeschlagen.';
+      console.error(err);
+    }
+  });
+
+
+
+
+function savePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(document.getElementById('chatArea').innerText, 10, 10);
+  doc.save('Gesprächsprotokoll.pdf');
+}
+
+let conversationStarted = false;
+let chatHistory = [];
+let latestSummary = "";
+let messageHistory = [];
+
+
+function resetConversation() {
+  conversationStarted = false;
+  chatHistory = [];
+  addMessage("🧹 Gesprächsverlauf zurückgesetzt. Du kannst jetzt ein neues Gespräch starten.", "gpt");
+  document.getElementById("chatArea").innerHTML = "";
+}
+
+async function ladeSchuldner() {
+  const id = document.getElementById('schuldner-id').value.trim();
+  if (!id) return alert("Bitte eine ID eingeben.");
+
+  try {
+    const res = await fetch(`/api/schuldner/${id}`);
+    const json = await res.json();
+
+    if (!res.ok) {
+      alert(json.error || "Fehler beim Laden.");
+      return;
+    }
+
+    const d = json.data;
+    document.getElementById("schuldner-name").value = d.NAME_SCHULDNER || "";
+    document.getElementById("schuldner-adresse").value = d.ADRESSE || "";
+    document.getElementById("schuldner-mandant").value = d.MANDANT || "";
+    document.getElementById("schuldner-unternehmen").value = d.UNTERNEHMEN || "";
+    document.getElementById("schuldner-produkt").value = d.PRODUKT || "";
+    document.getElementById("schuldner-rechnung").value = d.RECHNUNGSDATUM || "";
+    document.getElementById("schuldner-betrag").value = d.BETRAG || "";
+    document.getElementById("schuldner-mahn-mandant").value = d.MAHNUNG_MANDANT || "";
+    document.getElementById("schuldner-mahn-inkasso").value = d.MAHNUNG_INKASSO || "";
+    document.getElementById("schuldner-wunschrate").value = d.WUNSCHRATE || "";
+    document.getElementById("schuldner-wunschrate-plus20").value = d.WUNSCHRATE_PLUS20 || "";
+    document.getElementById("schuldner-fristtag").value = d.FRISTTAG || "";
+    document.getElementById("schuldner-zahlungstermin").value = d.ZAHLUNGSTERMIN || "";
+    document.getElementById("schuldner-geburtsdatum").value = d.GEBURTSDATUM || "";
+    document.getElementById("schuldner-geburtsort").value = d.GEBURTSORT || "";
+
+    alert("✅ Schuldnerdaten erfolgreich geladen.");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Fehler beim Abrufen.");
+  }
+}
+console.log("📦 schuldner im Start:", collectschuldner());
+console.log("📦 Typ:", typeof collectschuldner());
+
+
+async function sendToAssistant({ userInput, schuldner = {}, startConversation = false }) {
+  try {
+    const requestPayload = {
+      userInput,
+      history: chatHistory,
+    };
+
+      requestPayload.schuldner = schuldner;
+
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestPayload),
+    });
+
+    const data = await response.json();
+    return data.reply;
+  } catch (error) {
+    console.error("Fehler beim Senden an Assistant:", error);
+    return "⚠️ Fehler beim Laden der Antwort.";
+  }
+}
+
+
+
+function handleUserInput(customInput = null) {
+  const input = customInput || document.getElementById("userInput").value.trim();
+  if (!input) return;
+
+  addMessage(`👤 Nutzer: ${input}`, "user");
+  animateAvatar(true);
+
+  const schuldnerData = collectschuldner();
+
+  const requestData = {
+    userInput: input,
+    startConversation: false,
+    schuldner: schuldnerData, // ✅ Hier war vorher {}
+    history: chatHistory
+  };
+
+  if (!conversationStarted) {
+    requestData.startConversation = true;
+    requestData.userInput = "Start";
+    requestData.schuldner = schuldnerData;
+    conversationStarted = true;
+    chatHistory = []; // beim Start zurücksetzen
+  }
+
+  sendToAssistant(requestData)
+    .then((response) => {
+      addMessage(`💡 Vorschlag: ${response}`, "gpt");
+      chatHistory.push({ role: "user", content: requestData.userInput });
+      chatHistory.push({ role: "assistant", content: response });
+    })
+    .catch((error) => {
+      console.error("Fehler beim Antworten:", error);
+      addMessage("⚠️ Fehler beim Antworten", "gpt");
+    })
+    .finally(() => {
+      animateAvatar(false);
+      document.getElementById("userInput").value = "";
+    });
+}
+
+
+function startConversation() {
+  if (conversationStarted) {
+    console.warn("Gespräch läuft bereits.");
+    return;
+  }
+
+  const schuldner = collectschuldner();
+  addMessage("👤 Nutzer: Gespräch wird gestartet…", "user");
+  animateAvatar(true);
+
+  sendToAssistant({
+    userInput: "Start",
+    schuldner,
+    startConversation: true,
+  })
+    .then((response) => {
+      addMessage(`💡 Vorschlag: ${response}`, "gpt");
+      chatHistory.push({ role: "user", content: "Start" });
+      chatHistory.push({ role: "assistant", content: response });
+      conversationStarted = true;
+    })
+    .catch((error) => {
+      console.error("Fehler beim Start:", error);
+      addMessage("⚠️ Fehler beim Start", "gpt");
+    })
+    .finally(() => {
+      animateAvatar(false);
+    });
+}
+
+function animateAvatar(speaking) {
+  const avatar = document.getElementById("avatar");
+  if (speaking) {
+    avatar.classList.add("avatar-speaking");
+  } else {
+    avatar.classList.remove("avatar-speaking");
+  }
+}
+
+function collectschuldner() {
+  return {
+    NAME_SCHULDNER: document.getElementById("schuldner-name")?.value || "",
+    ADRESSE: document.getElementById("schuldner-adresse")?.value || "",
+    MANDANT: document.getElementById("schuldner-mandant")?.value || "",
+    UNTERNEHMEN: document.getElementById("schuldner-unternehmen")?.value || "",
+    PRODUKT: document.getElementById("schuldner-produkt")?.value || "",
+    RECHNUNGSDATUM: document.getElementById("schuldner-rechnung")?.value || "",
+    BETRAG: document.getElementById("schuldner-betrag")?.value || "",
+    MAHNSTATUS_MANDANT: document.getElementById("schuldner-mahn-mandant")?.value || "",
+    MAHNSTATUS_INKASSO: document.getElementById("schuldner-mahn-inkasso")?.value || "",
+    WUNSCHRATE: document.getElementById("schuldner-wunschrate")?.value || "",
+    WUNSCHRATE_PLUS20: document.getElementById("schuldner-wunschrate-plus20")?.value || "",
+    FRISTTAG: document.getElementById("schuldner-fristtag")?.value || "",
+    ZAHLUNGSTERMIN: document.getElementById("schuldner-zahlungstermin")?.value || "",
+    GEBURTSDATUM: document.getElementById("schuldner-geburtsdatum")?.value || "",
+    GEBURTSORT: document.getElementById("schuldner-geburtsort")?.value || "",
+  };
+}
+
+function addMessage(content, sender = "user") {
+  const message = document.createElement("div");
+  message.className = `chat-message ${sender}`;
+  message.innerHTML = marked.parse(content);
+  const chatArea = document.getElementById("chatArea");
+  chatArea.appendChild(message);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+async function requestSummary() {
+  const schuldner = collectschuldner();
+
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userInput: `
+Bitte fasse das gesamte Gespräch professionell zusammen – mit einer kurzen Einleitung in Fließtext und anschließend gut strukturierten Bulletpoints. Die Zusammenfassung ist für die interne Dokumentation gedacht.
+
+Folgende Punkte sollen enthalten sein:
+- Schuldnerdaten (Name, Adresse, ggf. Mandant und Unternehmen)
+- Forderungshintergrund (Produkt, Betrag, Rechnung, Frist)
+- Gesprächsverlauf (Reaktionen, Einwände, Klärungen)
+- Vereinbarung (Zahlung, Frist, Zahlungsart)
+- Gesprächsabschluss
+
+Keine Markdown-Formatierung, keine Emojis. Verwende neutrale Sprache. Die Aufzählungen sollen übersichtlich, aber sachlich formuliert sein.`,
+      schuldner,
+      history: chatHistory
+    })
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    latestSummary = data.reply; // ✅ hier wird gespeichert
+
+          document.getElementById("chatArea").innerHTML += `
+            <div class="chat-message gpt">
+              <strong>📝 Zusammenfassung:</strong><br>
+             <pre style="white-space: pre-line;">${latestSummary}</pre>
+            </div>
+          `;
+
+  } else {
+    alert("❌ Fehler bei der Zusammenfassung.");
+    console.error(data.error);
+  }
+}
+
+
+async function sendConversationByEmail() {
+  const email = document.getElementById("emailInput").value;
+  if (!email) return alert("Bitte gib eine E-Mail-Adresse ein.");
+
+  const content = document.getElementById("chatArea").innerText;
+
+  const res = await fetch('/send-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, content })
+  });
+
+  const json = await res.json();
+    document.getElementById("emailStatus").innerText = json.success
+    ? `✅ Gesprächsprotokoll gesendet an ${email}`
+    : `❌ Fehler: ${json.error}`;
+
+}
+
+
+document.getElementById("userInput").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    handleUserInput();
+  }
+});
+
+
+document.getElementById("pdfExportBtn").addEventListener("click", async () => {
+  const username = document.getElementById("usernameDisplay")?.textContent || "Unbekannt";
+  const schuldner = collectschuldner();
+
+  const debtorData = {
+    name: schuldner.NAME_SCHULDNER || "Unbekannt",
+    caseNumber: document.getElementById("schuldner-id")?.value || "-",
+    amount: schuldner.BETRAG ? `${schuldner.BETRAG} €` : "-",
+    lastContact: schuldner.ZAHLUNGSTERMIN || "-"
+  };
+
+  const summaryText = latestSummary || "⚠️ Keine Zusammenfassung verfügbar.";
+
+  console.log("✅ debtorData wird übergeben:", debtorData);
+  console.log("📄 summaryText für PDF:", summaryText);
+
+  try {
+    const response = await fetch("/generate-pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, summaryText, debtorData })
+    });
+
+    if (!response.ok) throw new Error("PDF konnte nicht erstellt werden.");
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Gesprächszusammenfassung.pdf";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert("Fehler beim PDF-Download.");
+  }
+});
+
+
+</script>
+<script src="/js/musterfall-button.js"></script>
+
+
+
+
+</body>
+</html>
