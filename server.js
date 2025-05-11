@@ -272,25 +272,25 @@ app.post('/send-email', async (req, res) => {
 
 const generatePDF = require('./pdfExport'); // ggf. Pfad anpassen
 
-
-app.use(express.json()); // falls noch nicht vorhanden
-
 app.post('/generate-pdf', async (req, res) => {
   const { username, summaryText, debtorData } = req.body;
 
-  const outputPath = path.join(__dirname, 'tmp', `pdf-${Date.now()}.pdf`);
+  // ✅ Nutze Render's /tmp Verzeichnis
+  const outputPath = path.join('/tmp', `pdf-${Date.now()}.pdf`);
   const logoPath = path.join(__dirname, 'assets', 'logo.png'); // optional
 
   try {
     await generatePDF({ username, summaryText, debtorData, outputPath, logoPath });
+
     res.download(outputPath, 'Gesprächszusammenfassung.pdf', err => {
-      if (!err) fs.unlinkSync(outputPath); // aufräumen
+      if (!err) fs.unlinkSync(outputPath); // temporäre Datei nach Versand löschen
     });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Fehler beim PDF-Generieren:", err);
     res.status(500).send('Fehler beim Erstellen der PDF');
   }
 });
+
 
 
 
