@@ -1,0 +1,90 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #f0f4f7, #d9e2ec);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .login-container,
+  .register-container,
+  .verify-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+    color: #003366;
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0055aa;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #003f7d;
+  }
+  
+  label {
+    font-size: 13px;
+    color: #333;
+  }
+  
+  label a {
+    color: #0055aa;
+    text-decoration: underline;
+  }
+  
+  p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  
